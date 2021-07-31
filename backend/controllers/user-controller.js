@@ -9,7 +9,6 @@ register = (req, res) => {
         return res.status(400).json({ message: "Bad Request 1" });
     }
     if (!req.body.username || !req.body.password) {
-        console.log(req.body);
         return res.status(400).json({ message: "Bad Request 2" });
     }
     if (req.body.username.length < 4 || req.body.password.length < 8) {

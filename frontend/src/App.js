@@ -1,25 +1,70 @@
-import logo from './logo.svg';
 import './App.css';
+import React from 'react';
+import LoginPage from './components/LoginPage';
+import NotesList from './components/NotesList';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import { login, register } from './services/UserService';
+import { getNotes } from './services/NoteService';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      list: [],
+      isLogged: false,
+      token: ""
+    }
+  }
+
+  componentDidMount() {
+    if (sessionStorage.getItem("state")) {
+      let state = JSON.parse(sessionStorage.getItem("state"));
+      this.setState(state, () => {
+        if (this.state.isLogged) {
+          this.getList();
+        }
+      })
+    }
+
+  }
+
+  clearState = () => {
+    this.setState({
+      list: [],
+      isLogged: false,
+      token: ""
+    }, () => {
+      this.saveToStorage()
+    })
+  }
+
+  saveToStorage = () => {
+    sessionStorage.setItem("state", JSON.stringify(this.state));
+  }
+
+  logi = () => {
+    let data = login();
+    this.setState({
+      isLogged: true,
+      token: data.token
+    }, () => {
+      this.saveToStorage();
+      this.getList();
+    })
+  }
+
+  getList = () => {
+    getNotes();
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <LoginPage register={this.registe} login={this.logi} />
+      </div>
+    );
+  }
 }
 
 export default App;

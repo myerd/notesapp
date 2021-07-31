@@ -4,16 +4,13 @@ createNote = (req, res) => {
     if (!req.body) {
         return res.status(400).json({ message: "Bad request" });
     }
-    if (!req.body.type) {
-        return res.status(400).json({ message: "Bad request" });
-    }
-    let note = new noteModel({
+    let note = new Note({
         user: req.session.user,
         name: req.body.name.toLowerCase(),
-        count: req.body.description,
-        price: req.body.price
+        description: req.body.description,
+        completed: req.body.completed
     })
-    item.save(function (err) {
+    note.save(function (err) {
         if (err) {
             console.log("Failed to save item. Reason:", err)
             return res.status(500).json({ message: "Internal server error" })
@@ -23,11 +20,35 @@ createNote = (req, res) => {
 }
 
 updateNote = async (req, res) => {
-    res.send('NOT IMPLEMENTED: Update Note');
+    if (!req.body) {
+        return res.status(400).json({ message: "Bad request" });
+    }
+    let note = {
+        user: req.session.user,
+        name: req.body.name.toLowerCase(),
+        description: req.body.description,
+        completed: req.body.completed
+    }
+    Note.replaceOne({ "_id": req.params.id, "user": req.session.user }, note, function (err, response) {
+        if (err) {
+            console.log("Failed to edit item id:" + req.params.id + ". Reason:", err)
+            return res.status(500).json({ message: "Internal server error" })
+        }
+        if (!response.nModified) {
+            return res.status(404).json({ message: "not found" })
+        }
+        return res.status(200).json({ message: "success" });
+    })
 }
 
 deleteNote = async (req, res) => {
-    res.send('NOT IMPLEMENTED: Delete Note');
+    Note.deleteOne({ "_id": req.params.id, "user": req.session.user }, function (err) {
+        if (err) {
+            console.log("Failed to remove item id:" + req.params.id + ". Reason:", err)
+            return res.status(500).json({ message: "Internal server error" })
+        }
+        return res.status(200).json({ message: "success" });
+    })
 }
 
 getNoteById = async (req, res) => {
@@ -35,14 +56,7 @@ getNoteById = async (req, res) => {
 }
 
 getNotes = async (req, res) => {
-    let query = { "user": req.session.user };
-    if (req.query.type) {
-        query["type"] = req.query.type.toLowerCase();
-    }
-    if (req.query.price) {
-        query["price"] = { $lte: req.query.price }
-    }
-    itemModel.find(query, function (err, items) {
+    Note.find(function (err, items) {
         if (err) {
             console.log("Failed to find items. Reason:", err)
             return res.status(500).json({ message: "Internal server error" })

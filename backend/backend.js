@@ -10,6 +10,7 @@ const sessionUtils = require('./utils/session-utils');
 const app = express();
 const apiPort = process.env.PORT || 3001
 
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
@@ -19,7 +20,7 @@ app.get('/', (req, res) => {
     res.send('Hello');
 });
 
-app.use('/api/n', sessionUtils.isUserLogged, notesRouter);
+app.use('/api/note', sessionUtils.isUserLogged, notesRouter);
 app.use('/api/user', userRouter);
 
 app.listen(apiPort, () => console.log(`Server running on port ${apiPort}`))

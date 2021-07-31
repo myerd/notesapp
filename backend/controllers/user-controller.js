@@ -9,6 +9,7 @@ register = (req, res) => {
         return res.status(400).json({ message: "Bad Request 1" });
     }
     if (!req.body.username || !req.body.password) {
+        console.log(req.body);
         return res.status(400).json({ message: "Bad Request 2" });
     }
     if (req.body.username.length < 4 || req.body.password.length < 8) {
@@ -87,7 +88,15 @@ login = async (req, res) => {
 }
 
 logout = async (req, res) => {
-    res.send('NOT IMPLEMENTED: logout');
+    if (!req.headers.token) {
+        return res.status(404).json({ message: "not found" });
+    }
+    Session.deleteOne({ "token": req.headers.token }, function (err) {
+        if (err) {
+            console.log("Failed to remove session in logout. Reason:", err)
+        }
+        return res.status(200).json({ message: "logged out!" });
+    })
 }
 
 getUserById = async (req, res) => {

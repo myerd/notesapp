@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Form, Button } from 'semantic-ui-react'
+import { Form, Button, Input } from 'semantic-ui-react'
 
 const LoginForm = ({
   handleSubmit,
@@ -16,7 +16,7 @@ const LoginForm = ({
       <Form onSubmit={handleSubmit}>
         <div>
           username
-          <input
+          <Input
             id='username'
             value={username}
             onChange={handleUsernameChange}
@@ -24,14 +24,14 @@ const LoginForm = ({
         </div>
         <div>
           password
-          <input
+          <Input
             id='password'
             type="password"
             value={password}
             onChange={handlePasswordChange}
           />
         </div>
-        <Button id="login-button" type="submit">login</Button>
+        <Button size="mini" compact inverted color="green" id="login-button" type="submit">login</Button>
       </Form>
     </div>
   )

@@ -1,12 +1,25 @@
-import React from 'react';
-import { Table, Button } from 'semantic-ui-react';
+import React from 'react'
+import { Card } from 'semantic-ui-react'
+import Note from './Note'
 
-export default class NotesList extends React.Component {
-
-  constructor(props) {
-    super(props)
-    this.state = {
-    }
+const NotesList = ({ notes, removeItem }) => {
+  let not
+  if (notes === null) {
+    not = []
   }
-
+  else {
+    not = notes.map((note, index) =>
+      <Note key={note._id} note={note} index={index} remove={removeItem} />
+    )
+  }
+  return (
+    <div >
+      <Card.Group centered>
+        {not}
+      </Card.Group>
+    </div>
+  )
 }
+
+
+export default NotesList

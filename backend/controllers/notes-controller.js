@@ -15,7 +15,7 @@ createNote = (req, res) => {
       console.log("Failed to save item. Reason:", err)
       return res.status(500).json({ message: "Internal server error" })
     }
-    return res.status(201).json({ message: "success!" });
+    return res.status(201).json(note);
   })
 }
 

@@ -1,20 +1,20 @@
 import './App.css'
 import React, { useState, useEffect, useRef } from 'react'
-import Note from './components/Note'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import NoteForm from './components/NoteForm'
 import Togglable from './components/Togglable'
 import Footer from './components/Footer'
+import NotesList from './components/NotesList'
+import NavBar from './components/NavBar'
 // import { Switch, Route, Redirect } from 'react-router-dom';
 import userService from './services/UserService'
 import noteService from './services/NoteService'
-import { Button } from 'semantic-ui-react'
+//import { Tab } from 'semantic-ui-react'
 
 const App = () => {
 
   const [notes, setNotes] = useState([])
-  const [showAll, setShowAll] = useState(true)
   const [errorMessage, setErrorMessage] = useState(null)
 
   const [username, setUsername] = useState('')
@@ -41,25 +41,6 @@ const App = () => {
     }
   }, [])
 
-  const toggleImportanceOf = id => {
-    const note = notes.find(n => n.id === id)
-    const changedNote = { ...note, important: !note.important }
-
-    noteService
-      .update(id, changedNote)
-      .then(returnedNote => {
-        setNotes(notes.map(note => note.id !== id ? note : returnedNote))
-      })
-      .catch(() => {
-        setErrorMessage(
-          `Note '${note.content}' was already removed from server`
-        )
-        setTimeout(() => {
-          setErrorMessage(null)
-        }, 5000)
-      })
-  }
-
   const addNote = (noteObject) => {
     noteFormRef.current.toggleVisibility()
     noteService
@@ -69,10 +50,11 @@ const App = () => {
       })
   }
 
-  const notesToShow = showAll
-    ? notes
-    : notes.filter(note => note.important)
-
+  const deleteNote = async (id) => {
+    await noteService.deleteNote(id, user.token)
+      .then(() => setNotes([]),
+        handleNotes)
+  }
 
   /* const handleRegister = async (user) => {
   }*/
@@ -86,21 +68,29 @@ const App = () => {
       window.localStorage.setItem(
         'loggedNoteappUser', JSON.stringify(user)
       )
-
       setUser(user)
       setUsername('')
       setPassword('')
+      handleNotes(user)
     } catch (exception) {
       setErrorMessage('wrong credentials')
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
     }
+
   }
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     userService.logout(user.token)
-    localStorage.clear()
+    localStorage.removeItem('loggedNoteappUser')
+    setUser(null)
+    setNotes(null)
+  }
+
+  const handleNotes = async (user) => {
+    let data = await noteService.getNotes(user.token)
+    setNotes(data)
   }
 
   const loginForm = () => (
@@ -122,40 +112,20 @@ const App = () => {
   )
 
   return (
-    <div className='body'>
-      <h1>Notes</h1>
-      <Notification message={errorMessage} />
-
-      {user === null ?
-        loginForm() :
-        <div>
-          <p>{user.token} logged in</p>
-          {noteForm()}
-        </div>
-      }
-
-      <div>
-        <Button onClick={() => setShowAll(!showAll)}>
-          show {showAll ? 'important' : 'all'}
-        </Button>
+    <div className='wrapper'>
+      <div className='topLeftCorner'>
+        <h1>Notes Appi</h1>
       </div>
-      <div>
-        <Button onClick={() => noteService.getNotes(user.token)}>Hae roskat</Button>
+      <div className='header'>
+        <Notification message={errorMessage} />
+        <NavBar user={user} handleLogout={handleLogout} loginForm={loginForm} noteForm={noteForm} />
       </div>
-      <div>
-        <Button onClick={() => handleLogout()}> LOGOUT</Button>
+      <div className='content'>
+        <NotesList notes={notes} removeItem={deleteNote} />
       </div>
-      <ul>
-        {notesToShow.map(note =>
-          <Note
-            key={note.id}
-            note={note}
-            toggleImportance={() => toggleImportanceOf(note.id)}
-          />
-        )}
-      </ul>
-
-      <Footer />
+      <div className='footer'>
+        <Footer />
+      </div>
     </div>
   )
 

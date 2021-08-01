@@ -14,22 +14,27 @@ const login = async credentials => {
 }
 
 const register = async user => {
-  await axios.post(`${baseUrl}/register`, user).then((res) => {
-    return res.data
-  }).catch((error) => {
-    console.log(error)
-  })
+  await axios.post(`${baseUrl}/register`, user)
+    .then((res) => {
+      return res.data
+    }).catch((error) => {
+      console.log(error)
+    })
 
 }
 
-const logout = async user => {
-  await axios.post(`${baseUrl}/logout`, {
-    headers: { token: user },
-  }).then((res) => {
-    console.log(res)
-  }).catch((error) => {
-    console.log(error)
+const logout = user => {
+  axios.post(`${baseUrl}/logout`, { data: [] }, {
+    headers: {
+      'token': user
+    }
   })
+    .then((res) => {
+      return res.status
+    })
+    .catch((error) => {
+      console.log(error)
+    })
 }
 
 export default { login, register, logout }

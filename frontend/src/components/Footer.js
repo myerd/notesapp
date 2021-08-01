@@ -1,16 +1,10 @@
 import React from 'react'
 
 const Footer = () => {
-  const footerStyle = {
-    color: 'pink',
-    fontStyle: 'italic',
-    fontSize: 16
-  }
-
   return (
-    <div style={footerStyle}>
+    <div>
       <br />
-      <em>ALOT OF NOTES? :D</em>
+      <em>\o/</em>
     </div>
   )
 }

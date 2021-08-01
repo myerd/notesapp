@@ -1,14 +1,33 @@
 import React from 'react'
+import { Button, Card } from 'semantic-ui-react'
 
-const Note = ({ note, toggleImportance }) => {
-  const label = note.important
-    ? 'make not important' : 'make important'
-
+const Note = ({ note, remove }) => {
+  const cardContentStyle = {
+    backgroundColor: '#202030',
+    height: '150px',
+    color: 'white'
+  }
+  const cardHeaderStyle = {
+    backgroundColor: 'black',
+    height: '25px',
+    color: 'white'
+  }
+  const cardExtraStyle = {
+    backgroundColor: 'black'
+  }
+  const cardMetaStyle = {
+    backgroundColor: '#332244',
+    color: 'grey'
+  }
   return (
-    <li className='note'>
-      <span>{note.content}</span>
-      <button onClick={toggleImportance}>{label}</button>
-    </li>
+    <Card>
+      <Card.Header style={cardHeaderStyle}>{note.name}</Card.Header>
+      <Card.Meta style={cardMetaStyle}>{note.user}</Card.Meta>
+      <Card.Content style={cardContentStyle}>{note.description}</Card.Content>
+      <Card.Content extra style={cardExtraStyle}>
+        <Button compact size="mini" inverted color="red" onClick={() => remove(note._id)}>REMOVE</Button>
+      </Card.Content>
+    </Card>
   )
 }
 

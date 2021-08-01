@@ -5,10 +5,59 @@
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: rgb(195, 235, 144);
+  background-color: rgba(90, 93, 70, 0.705);
 }
 
 .code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.note {
+  background-color: rgb(114, 54, 94)
+}
+
+.content {
+  grid-area: content;
+  background-color: rgba(49, 180, 88, 0.075);
+}
+
+.header {
+  grid-area: header;
+  background-color: rgba(58, 63, 60, 0.185);
+  color: 'darkred';
+  size: 16;
+  position: 'center';
+  padding: 20;
+  height: 20%;
+}
+
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 25%  50%  25%;
+  grid-template-rows: 25% auto 100px;
+  grid-row-gap: 10px;
+  grid-template-areas:
+    'topLeftCorner header  header'
+    'content content content'
+    'footer footer footer';
+  background-color: rgb(14, 14, 14);
+  color: rgb(202, 130, 130);
+}
+
+.footer {
+  color: 'pink';
+  Size: 16;
+  background-color: rgb(0, 0, 0);
+  grid-area: footer;
+}
+
+.leftTopCorner {
+  grid-area: leftTopCorner;
+  background-color: rgb(31, 61, 40);
+}
+
+.Card.Content {
+  background-color: rgb(143, 228, 168);
 }

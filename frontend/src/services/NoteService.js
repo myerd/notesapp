@@ -1,19 +1,13 @@
 import axios from 'axios'
 const baseUrl = '/api/note'
 
-
-
-const getNotes = (token) => {
-  axios.get(baseUrl, {
+const getNotes = async token => {
+  const response = await axios.get(baseUrl, {
     headers: {
       'token': token
     }
   })
-    .then((res) => {
-      console.log(res.data)
-    }).catch((error) => {
-      console.log(error)
-    })
+  return response.data
 }
 
 const addNote = async (note, token) => {
@@ -26,8 +20,18 @@ const addNote = async (note, token) => {
 }
 
 
-const deleteNote = async id => {
-  return id
+const deleteNote = async (id, token) => {
+  await axios.delete(`${baseUrl}/${id}`, {
+    headers: {
+      'token': token
+    }
+  })
+    .then(() => {
+
+    })
+    .catch((error) => {
+      console.log(error)
+    })
 }
 
 const editNote = async (id, note, token) => {

@@ -1,37 +1,35 @@
 import axios from 'axios'
+const baseUrl = '/api/user'
 
-export const register = async (user) => {
+const config = {
+  headers: {
+    Accept: '*/*',
+    'Content-Type': 'application/json'
+  },
+}
+
+const login = async credentials => {
+  const response = await axios.post(`${baseUrl}/login`, credentials, config)
+  return response.data
+}
+
+const register = async user => {
+  await axios.post(`${baseUrl}/register`, user).then((res) => {
+    return res.data
+  }).catch((error) => {
+    console.log(error)
+  })
 
 }
 
-export const login = async (user) => {
-    let request = {
-        method: "POST",
-        mode: "cors",
-        headers: { "Content-type": "application/json" },
-        body: JSON.stringify(user)
-    }
-    let response = await fetch("/api/user/login", request).catch(error => {
-        console.log("There was an error:" + error)
-    });
-    if (!response) {
-        return;
-    }
-    if (response.ok) {
-        let data = await response.json().catch(error => {
-            console.log("Error parsing json:" + error);
-        });
-        if (!data) {
-            console.log("Failed to parse json")
-            return;
-        }
-        console.log(data);
-        return data;
-    } else {
-        console.log("Server responded with a status:" + response.status)
-    }
+const logout = async user => {
+  await axios.post(`${baseUrl}/logout`, {
+    headers: { token: user },
+  }).then((res) => {
+    console.log(res)
+  }).catch((error) => {
+    console.log(error)
+  })
 }
 
-export const logout = async () => {
-
-}
+export default { login, register, logout }

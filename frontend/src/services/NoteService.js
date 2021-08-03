@@ -35,12 +35,12 @@ const deleteNote = async (id, token) => {
 }
 
 const editNote = async (id, note, token) => {
-  const request = axios.put(`${baseUrl}/${id}`, note, {
+  const response = await axios.put(`${baseUrl}/${id}`, note, {
     headers: {
       'token': token
     }
   })
-  return request.then(response => response.data)
+  return response.data
 }
 
 export default { getNotes, editNote, deleteNote, addNote }

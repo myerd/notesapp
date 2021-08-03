@@ -4,7 +4,7 @@ const Footer = () => {
   return (
     <div>
       <br />
-      <em>\o/</em>
+      <h1>\o/</h1>
     </div>
   )
 }

@@ -80,7 +80,7 @@ login = async (req, res) => {
           console.log("Saving session failed. Reason:", err)
           return res.status(500).json({ message: "Internal server error" })
         }
-        return res.status(200).json({ "token": token })
+        return res.status(200).json({ "token": token, "username": user })
       })
     })
   })

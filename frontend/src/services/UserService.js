@@ -16,7 +16,7 @@ const login = async credentials => {
 const register = async user => {
   await axios.post(`${baseUrl}/register`, user)
     .then((res) => {
-      return res.data
+      console.log(res.data)
     }).catch((error) => {
       console.log(error)
     })

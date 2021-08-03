@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { Button, Input, Form, Label, Modal } from 'semantic-ui-react'
 
-const NoteForm = ({ createNote }) => {
-  const [name, setName] = useState('')
-  const [description, setDescription] = useState('')
-  const [completed, setCompleted] = useState(false)
+const EditNoteForm = ({ note, editNote }) => {
+  const [name, setName] = useState(note.name)
+  const [description, setDescription] = useState(note.description)
+  const [completed, setCompleted] = useState(note.completed)
   const [open, setOpen] = useState(false)
 
   const nameHandleChange = (event) => {
@@ -20,13 +20,13 @@ const NoteForm = ({ createNote }) => {
   }
 
 
-  const addNote = (event) => {
+  const eNote = (event) => {
     event.preventDefault()
-    createNote({
+    editNote({
       name: name,
       description: description,
       completed: completed,
-    })
+    }, note._id)
     setOpen(false)
     setName('')
     setDescription('')
@@ -37,12 +37,12 @@ const NoteForm = ({ createNote }) => {
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}
       open={open}
-      trigger={<Button compact size="small" inverted color="green">Add note</Button>}
+      trigger={<Button compact size="small" inverted color="green">Edit note</Button>}
     >
       <Modal.Content >
         <div>
-          <h2>Create a new note</h2>
-          <Form size="mini" inverted onSubmit={addNote}>
+          <h2>Edit note</h2>
+          <Form size="mini" inverted onSubmit={eNote}>
             <Form.Field inline>
               <Label color="black" htmlFor="name">Note name:</Label>
               <Input type="text"
@@ -64,7 +64,7 @@ const NoteForm = ({ createNote }) => {
                 onChange={completedHandleChange}
                 value={completed} />
             </Form.Field>
-            <Button compact size="mini" inverted color="green" type="submit">Add note</Button>
+            <Button compact size="mini" inverted color="green" type="submit">Save note</Button>
           </Form>
         </div>
       </Modal.Content>
@@ -72,4 +72,4 @@ const NoteForm = ({ createNote }) => {
   )
 }
 
-export default NoteForm
+export default EditNoteForm

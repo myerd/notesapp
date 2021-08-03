@@ -6,7 +6,7 @@ createNote = (req, res) => {
   }
   let note = new Note({
     user: req.session.user,
-    name: req.body.name.toLowerCase(),
+    name: req.body.name,
     description: req.body.description,
     completed: req.body.completed
   })
@@ -37,7 +37,8 @@ updateNote = async (req, res) => {
     if (!response.nModified) {
       return res.status(404).json({ message: "not found" })
     }
-    return res.status(200).json({ message: "success" });
+    note = { ...note, _id: req.params.id }
+    return res.status(200).json(note);
   })
 }
 
